@@ -1,6 +1,6 @@
 package analattice;
 
-public interface GetValueFromRecord {
+public interface GetRecordValue {
 
     String getString(GetColumnValue record) throws Exception;
 

@@ -25,7 +25,7 @@ public class BatchQR {
         this.currentRow = numColumns;
     }
 
-    public void observe(DenseVector row){
+    public void append(DenseVector row){
         if(row.size() != numColumns){
             throw new IllegalArgumentException(String.format("observed row must have %d entries", numColumns));
         }

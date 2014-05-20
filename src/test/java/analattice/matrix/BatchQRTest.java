@@ -28,7 +28,7 @@ public class BatchQRTest {
         for (int i = 1; i <= numObserved; i++) {
             updateRow.set(0, 1);
             updateRow.set(1, i);
-            batchQR.observe(updateRow);
+            batchQR.append(updateRow);
             sum += i;
         }
         double mean = sum/numObserved;
@@ -50,6 +50,6 @@ public class BatchQRTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void rowNotTheRightSize() throws Exception {
-        new BatchQR(4, 2).observe(new DenseVector(3));
+        new BatchQR(4, 2).append(new DenseVector(3));
     }
 }

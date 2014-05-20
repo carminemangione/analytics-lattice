@@ -1,4 +1,4 @@
-package analattice.stats;
+package analattice.stats.minmax;
 
 public class DoubleMinMax {
 
@@ -32,7 +32,7 @@ public class DoubleMinMax {
         this.max = currentMax;
     }
 
-    public void observe(double value) {
+    public void visit(double value) {
         if (!Double.isNaN(value)) {
             if (min == null) {
                 min = value;

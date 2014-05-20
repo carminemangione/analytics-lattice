@@ -7,7 +7,9 @@ import analattice.reader.RecordReader;
 import analattice.reader.ResultSetRecordReader;
 import analattice.reader.TransformReader;
 import analattice.variable.BooleanFunctionVariable;
+import analattice.variable.BooleanPrimitiveFunctionVariable;
 import analattice.variable.FunctionVariable;
+import analattice.visitor.DescriptionVisitors;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import org.junit.Before;
@@ -71,14 +73,37 @@ public class AbaloneModelingTest {
         }
     }
 
-    private static class IsMale extends BooleanFunctionVariable{
+    @Test
+    public void doSomeStats() throws Exception {
+        ImmutableList<FunctionVariable> variables = ImmutableList.of((FunctionVariable) new IsMale());
+        DescriptionVisitors descriptionVisitors = DescriptionVisitors.builder()
+                .addDoubles("length", "diameter", "height", "whole_weight",
+                        "shucked_weight", "viscera_weight", "shell_weight")
+                .addDoublePrimitives("length", "diameter", "height", "whole_weight",
+                        "shucked_weight", "viscera_weight", "shell_weight")
+                .addInteger("rings")
+                .addIntegerPrimitive("rings")
+                .addBoolean("is_male")
+                .addBooleanPrimitive("is_male")
+                .build();
+        try(Connection connection = derbyRule.openConnection();
+            PreparedStatement ps = connection.prepareStatement("SELECT * from abalone");
+            RecordReader reader = new TransformReader(new ResultSetRecordReader(ps.executeQuery()), variables)){
+            while(reader.next()){
+                descriptionVisitors.visit(reader);
+            }
+        }
+        System.out.println(descriptionVisitors);
+    }
+
+    private static class IsMale extends BooleanPrimitiveFunctionVariable{
 
         protected IsMale() {
             super("is_male");
         }
 
         @Override
-        public Boolean getBoolean(GetColumnValue record) throws Exception{
+        public boolean getBooleanPrimitive(GetColumnValue record) throws Exception {
             return "M".equalsIgnoreCase(record.getString("sex"));
         }
     }

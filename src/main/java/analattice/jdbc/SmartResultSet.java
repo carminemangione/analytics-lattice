@@ -33,7 +33,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
 
     @Override
     public Boolean getBoolean(int columnIndex) throws SQLException {
-        return isNull(columnIndex) ? null : rs.getBoolean(columnIndex);
+        return isNull(columnIndex) ? null : rs.getBoolean(columnIndex+1);
     }
 
     @Override
@@ -45,11 +45,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
     @Override
     public boolean getBooleanPrimitive(int columnIndex) throws SQLException {
         exceptIfNull(columnIndex);
-        return rs.getBoolean(columnIndex);
-    }
-
-    public boolean getBooleanJDBC(String columnLabel) throws SQLException {
-        return rs.getBoolean(columnLabel);
+        return rs.getBoolean(columnIndex+1);
     }
 
     @Override
@@ -59,7 +55,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
 
     @Override
     public Integer getInteger(int columnIndex) throws SQLException {
-        return isNull(columnIndex) ? null : rs.getInt(columnIndex);
+        return isNull(columnIndex) ? null : rs.getInt(columnIndex+1);
     }
 
     @Override
@@ -71,11 +67,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
     @Override
     public int getIntegerPrimitive(int columnIndex) throws SQLException {
         exceptIfNull(columnIndex);
-        return rs.getInt(columnIndex);
-    }
-
-    public int getIntegerJDBC(String columnLabel) throws SQLException {
-        return rs.getInt(columnLabel);
+        return rs.getInt(columnIndex+1);
     }
 
     @Override
@@ -85,7 +77,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
 
     @Override
     public Long getLong(int columnIndex) throws SQLException {
-        return isNull(columnIndex) ? null : rs.getLong(columnIndex);
+        return isNull(columnIndex) ? null : rs.getLong(columnIndex+1);
     }
 
     @Override
@@ -97,11 +89,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
     @Override
     public long getLongPrimitive(int columnIndex) throws SQLException {
         exceptIfNull(columnIndex);
-        return rs.getLong(columnIndex);
-    }
-
-    public long getLongJDBC(String columnLabel) throws SQLException {
-        return rs.getLong(columnLabel);
+        return rs.getLong(columnIndex+1);
     }
 
     @Override
@@ -111,7 +99,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
 
     @Override
     public Double getDouble(int columnIndex) throws SQLException {
-        return isNull(columnIndex) ? null : rs.getDouble(columnIndex);
+        return isNull(columnIndex) ? null : rs.getDouble(columnIndex+1);
     }
 
     @Override
@@ -123,11 +111,7 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
     @Override
     public double getDoublePrimitive(int columnIndex) throws SQLException {
         exceptIfNull(columnIndex);
-        return rs.getDouble(columnIndex);
-    }
-
-    public double getDoubleJDBC(String columnLabel) throws SQLException {
-        return rs.getDouble(columnLabel);
+        return rs.getDouble(columnIndex+1);
     }
 
     public boolean next() throws SQLException {

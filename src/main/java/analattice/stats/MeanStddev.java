@@ -21,35 +21,53 @@ public class MeanStddev {
         this.sharedRow.set(0, 1);
     }
 
-    public void observe(Double x){
-        if(x != null && !Double.isNaN(x)){
+    public void visit(Double x) {
+        if (x != null)
+            visit(x.doubleValue());
+    }
+
+    public void visit(double x) {
+        if (!Double.isNaN(x)) {
             dirty = true;
             sharedRow.set(1, x);
-            batchQR.observe(sharedRow);
+            batchQR.append(sharedRow);
         }
     }
 
-    public Double getMean(){
+    public void visit(Integer x) {
+        if (x != null) {
+            visit(x.intValue());
+        }
+    }
+
+    public void visit(int x) {
+        dirty = true;
+        sharedRow.set(1, x);
+        batchQR.append(sharedRow);
+    }
+
+
+    public Double getMean() {
         updateIfDirty();
         return mean;
     }
 
-    public Double getStddev(){
+    public Double getStddev() {
         updateIfDirty();
         return stddev;
     }
 
-    public Double getVariance(){
+    public Double getVariance() {
         updateIfDirty();
         return stddev == null ? null : stddev * stddev;
     }
 
     private void updateIfDirty() {
-        if(dirty) {
+        if (dirty) {
             DenseMatrix r = batchQR.getR();
             double sqrtN = r.get(0, 0);
             mean = r.get(0, 1) / sqrtN;
-            stddev = r.get(1,1) / sqrtN;
+            stddev = r.get(1, 1) / sqrtN;
         }
     }
 }

@@ -1,9 +1,9 @@
 package analattice.variable;
 
 import analattice.GetColumnValue;
-import analattice.GetValueFromRecord;
+import analattice.GetRecordValue;
 
-public abstract class FunctionVariable implements GetValueFromRecord, Variable {
+public abstract class FunctionVariable implements GetRecordValue, Variable {
 
     private final String name;
 

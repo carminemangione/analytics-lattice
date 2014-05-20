@@ -1,5 +1,6 @@
 package analattice.stats;
 
+import analattice.stats.description.DoubleDescription;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,14 +26,14 @@ public class DoubleDescriptionTest {
     @Test
     public void grabBag() throws Exception {
         DoubleDescription description = new DoubleDescription();
-        description.observe(1.0);
-        description.observe(0.0);
-        description.observe(0.0);
-        description.observe(-0.1);
-        description.observe(1.3);
-        description.observe(null);
-        description.observe(null);
-        description.observe(Double.NaN);
+        description.visit(1.0);
+        description.visit(0.0);
+        description.visit(0.0);
+        description.visit(-0.1);
+        description.visit(1.3);
+        description.visit(null);
+        description.visit(null);
+        description.visit(Double.NaN);
 
         assertEquals(8, description.getCountObserved());
         assertEquals(1, description.getCountNan());
