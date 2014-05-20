@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MinMaxTest {
+public class DoubleMinMaxTest {
 
     @Test
     public void noValues() throws Exception {
-        MinMax minMax = MinMax.make();
+        DoubleMinMax minMax = new DoubleMinMax();
         assertFalse(minMax.hasSeenAny());
         assertNull(minMax.getMin());
         assertNull(minMax.getMax());
@@ -16,7 +16,7 @@ public class MinMaxTest {
 
     @Test
     public void someValuesNothingCrazy() throws Exception {
-        MinMax minMax = MinMax.make();
+        DoubleMinMax minMax = new DoubleMinMax();
         minMax.observe(0.0);
         minMax.observe(1.0);
         minMax.observe(-1.0);
@@ -27,7 +27,7 @@ public class MinMaxTest {
 
     @Test
     public void nanIsNotAValue() throws Exception {
-        MinMax minMax = MinMax.make();
+        DoubleMinMax minMax = new DoubleMinMax();
         minMax.observe(Double.NaN);
         assertFalse(minMax.hasSeenAny());
         minMax.observe(0.0);
@@ -38,7 +38,7 @@ public class MinMaxTest {
 
     @Test
     public void infinitesAreValues() throws Exception {
-        MinMax minMax = MinMax.make();
+        DoubleMinMax minMax = new DoubleMinMax();
         minMax.observe(Double.NaN);
         minMax.observe(Double.NEGATIVE_INFINITY);
         minMax.observe(Double.POSITIVE_INFINITY);

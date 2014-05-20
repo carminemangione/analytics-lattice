@@ -1,12 +1,8 @@
 package analattice.stats;
 
-public class MinMax {
+public class DoubleMinMax {
 
-    public static MinMax make() {
-        return new MinMax(null, null);
-    }
-
-    public static MinMax fromPrevious(Double currentMin, Double currentMax) {
+    public static DoubleMinMax fromPrevious(Double currentMin, Double currentMax) {
         if ((currentMin == null ^ currentMax == null)) {
             throw new IllegalArgumentException("either both currentMin and currentMax can be null or neither can be null");
         }
@@ -21,14 +17,17 @@ public class MinMax {
                 throw new IllegalArgumentException("currentMin should be less than currentMax");
             }
         }
-        return new MinMax(currentMin, currentMax);
+        return new DoubleMinMax(currentMin, currentMax);
     }
 
     private Double min = null;
     private Double max = null;
 
-    protected MinMax(Double currentMin, Double currentMax) {
+    public DoubleMinMax() {
+        this(null, null);
+    }
 
+    protected DoubleMinMax(Double currentMin, Double currentMax) {
         this.min = currentMin;
         this.max = currentMax;
     }
