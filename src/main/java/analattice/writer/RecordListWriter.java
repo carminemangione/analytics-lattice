@@ -1,15 +1,17 @@
-package analattice;
+package analattice.writer;
+
+import analattice.ColumnSet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordListWriter<K> {
+public class RecordListWriter<String> {
 
-    private final ColumnSet<K> columnSet;
+    private final ColumnSet<String> columnSet;
     private final List<List<Object>> records = new ArrayList<List<Object>>();
     private List<Object> currentRecord = null;
 
-    public RecordListWriter(ColumnSet<K> columnSet) {
+    public RecordListWriter(ColumnSet<String> columnSet) {
         this.columnSet = columnSet;
     }
 
@@ -18,7 +20,7 @@ public class RecordListWriter<K> {
         records.add(currentRecord);
     }
 
-    public void set(K column, Object value){
+    public void set(String column, Object value){
         currentRecord.set(columnSet.columnIndex(column), value);
     }
 

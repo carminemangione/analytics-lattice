@@ -8,35 +8,35 @@ import java.util.Iterator;
 public class ColumnSet<E> implements Iterable<E> {
 
     public static <ELEMENT> ColumnSet<ELEMENT> of(){
-        return new ColumnSet<ELEMENT>(ImmutableList.<ELEMENT>of());
+        return new ColumnSet<>(ImmutableList.<ELEMENT>of());
     }
 
     public static <ELEMENT> ColumnSet<ELEMENT> of(ELEMENT e0){
-        return new ColumnSet<ELEMENT>(ImmutableList.of(e0));
+        return new ColumnSet<>(ImmutableList.of(e0));
     }
 
     public static <ELEMENT> ColumnSet<ELEMENT> of(ELEMENT e0, ELEMENT e1){
-        return new ColumnSet<ELEMENT>(ImmutableList.of(e0, e1));
+        return new ColumnSet<>(ImmutableList.of(e0, e1));
     }
 
     public static <ELEMENT> ColumnSet<ELEMENT> of(ELEMENT e0, ELEMENT e1, ELEMENT e2){
-        return new ColumnSet<ELEMENT>(ImmutableList.of(e0, e1, e2));
+        return new ColumnSet<>(ImmutableList.of(e0, e1, e2));
     }
 
     public static <ELEMENT> ColumnSet<ELEMENT> of(ELEMENT e0, ELEMENT e1, ELEMENT e2, ELEMENT e3){
-        return new ColumnSet<ELEMENT>(ImmutableList.of(e0, e1, e2, e3));
+        return new ColumnSet<>(ImmutableList.of(e0, e1, e2, e3));
     }
 
-    public static <ELEMENT> ColumnSet<ELEMENT> of(Iterable<? extends ELEMENT> iterable){
-        return new ColumnSet<ELEMENT>(ImmutableList.copyOf(iterable));
+    public static <ELEMENT> ColumnSet<ELEMENT> from(Iterable<? extends ELEMENT> iterable){
+        return new ColumnSet<>(ImmutableList.copyOf(iterable));
     }
 
-    public static <ELEMENT> ColumnSet<ELEMENT> of(ELEMENT[] iterable){
-        return new ColumnSet<ELEMENT>(ImmutableList.copyOf(iterable));
+    public static <ELEMENT> ColumnSet<ELEMENT> from(ELEMENT[] iterable){
+        return new ColumnSet<>(ImmutableList.copyOf(iterable));
     }
 
-    public static <ELEMENT> ColumnSet<ELEMENT> of(ImmutableList<ELEMENT> immutableList){
-        return new ColumnSet<ELEMENT>(immutableList);
+    public static <ELEMENT> ColumnSet<ELEMENT> from(ImmutableList<ELEMENT> immutableList){
+        return new ColumnSet<>(immutableList);
     }
 
     private final ImmutableList<E> columns;
@@ -76,12 +76,33 @@ public class ColumnSet<E> implements Iterable<E> {
         return columnIndices;
     }
 
+    public int size() {
+        return columns.size();
+    }
+
     @Override
     public Iterator<E> iterator() {
         return this.columns.iterator();
     }
 
-    public int size() {
-        return columns.size();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ColumnSet columnSet = (ColumnSet) o;
+
+        return columns.equals(columnSet.columns);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return columns.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return columns.toString();
     }
 }
