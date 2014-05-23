@@ -12,6 +12,7 @@ public class AC_DescriptionVisitor {
                 .addDoubles("length", "diameter", "height", "whole_weight",
                         "shucked_weight", "viscera_weight", "shell_weight")
                 .addInteger("rings")
+                .addString("sex")
                 .build();
         visitAllAbalone(descriptionVisitors);
 

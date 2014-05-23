@@ -1,5 +1,7 @@
 package analyticslattice.stats.description;
 
+import analyticslattice.stats.histogram.DoubleHistogram;
+import analyticslattice.stats.histogram.Histogram;
 import analyticslattice.stats.MeanStddev;
 import analyticslattice.stats.minmax.DoubleMinMax;
 
@@ -7,50 +9,43 @@ public class DoubleDescription implements PrintableDescription {
 
     private final DoubleMinMax minMax = new DoubleMinMax();
     private final MeanStddev meanStddev = new MeanStddev();
-    private int countObserved = 0;
-    private int countZero = 0;
-    private int countOne = 0;
-    private int countNull = 0;
-    private int countNan = 0;
+    private final DoubleHistogram histogram;
+
 
     public DoubleDescription() {
+        this(Histogram.DEFAULT_SIZE);
+    }
+
+    public DoubleDescription(int histogramMaxDistinctValues) {
+        this.histogram = new DoubleHistogram(histogramMaxDistinctValues);
     }
 
     public void visit(Double x) {
-        countObserved++;
-        if (x == null) {
-            countNull++;
-        } else if (Double.isNaN(x)) {
-            countNan++;
-        } else {
-            if (x == 0.0) {
-                countZero++;
-            } else if (x == 1.0) {
-                countOne++;
-            }
+        if(x != null && !Double.isNaN(x)){
             minMax.visit(x);
             meanStddev.visit(x);
         }
+        histogram.visit(x);
     }
 
-    public int getCountObserved() {
-        return countObserved;
+    public int getTotalCount() {
+        return histogram.getTotalCount();
     }
 
     public int getCountZero() {
-        return countZero;
+        return histogram.countOf(0.0);
     }
 
     public int getCountOne() {
-        return countOne;
+        return histogram.countOf(1.0);
     }
 
     public int getCountNull() {
-        return countNull;
+        return histogram.countOf(null);
     }
 
     public int getCountNan() {
-        return countNan;
+        return histogram.countOf(Double.NaN);
     }
 
     public Double getMin() {
@@ -81,9 +76,13 @@ public class DoubleDescription implements PrintableDescription {
         return meanStddev;
     }
 
+    public DoubleHistogram getHistogram() {
+        return histogram;
+    }
+
     @Override
     public String header() {
-        return "countTotal\tcountZero\tcountOne\tcountNull\tcountNan\t" +
+        return "totalCount\tcountZero\tcountOne\tcountNull\tcountNan\t" +
                 "min\tmax\tmean\tvariance\tstddev";
     }
 
@@ -91,11 +90,11 @@ public class DoubleDescription implements PrintableDescription {
     @Override
     public void toString(StringBuilder stringBuilder) {
         stringBuilder
-                .append(countObserved).append("\t")
-                .append(countZero).append("\t")
-                .append(countOne).append("\t")
-                .append(countNull).append("\t")
-                .append(countNan).append("\t")
+                .append(getTotalCount()).append("\t")
+                .append(getCountZero()).append("\t")
+                .append(getCountOne()).append("\t")
+                .append(getCountNull()).append("\t")
+                .append(getCountNan()).append("\t")
 
                 .append(getMin()).append("\t")
                 .append(getMax()).append("\t")

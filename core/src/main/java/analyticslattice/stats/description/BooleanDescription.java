@@ -2,7 +2,7 @@ package analyticslattice.stats.description;
 
 public class BooleanDescription implements PrintableDescription {
 
-    private int countObserved = 0;
+    private int totalCount = 0;
     private int countFalse = 0;
     private int countTrue = 0;
     private int countNull = 0;
@@ -11,7 +11,7 @@ public class BooleanDescription implements PrintableDescription {
     }
 
     public void visit(Boolean x) {
-        countObserved++;
+        totalCount++;
         if (x == null) {
             countNull++;
         } else {
@@ -23,8 +23,8 @@ public class BooleanDescription implements PrintableDescription {
         }
     }
 
-    public int getCountObserved() {
-        return countObserved;
+    public int getTotalCount() {
+        return totalCount;
     }
 
 
@@ -42,13 +42,13 @@ public class BooleanDescription implements PrintableDescription {
 
     @Override
     public String header() {
-        return "countTotal\tcountFalse\tcountTrue\tcountNull";
+        return "totalCount\tcountFalse\tcountTrue\tcountNull";
     }
 
     @Override
     public void toString(StringBuilder stringBuilder) {
         stringBuilder
-                .append(countObserved).append("\t")
+                .append(totalCount).append("\t")
                 .append(countFalse).append("\t")
                 .append(countTrue).append("\t")
                 .append(countNull);

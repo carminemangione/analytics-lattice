@@ -1,40 +1,41 @@
 package analyticslattice.stats.description;
 
 import analyticslattice.stats.MeanStddev;
+import analyticslattice.stats.histogram.Histogram;
+import analyticslattice.stats.histogram.IntegerHistogram;
 import analyticslattice.stats.minmax.IntegerMinMax;
 
 public class IntegerPrimitiveDescription implements PrintableDescription{
 
     private final IntegerMinMax minMax = new IntegerMinMax();
     private final MeanStddev meanStddev = new MeanStddev();
-    private int countObserved = 0;
-    private int countZero = 0;
-    private int countOne = 0;
+    private final IntegerHistogram histogram;
 
     public IntegerPrimitiveDescription() {
+        this(Histogram.DEFAULT_SIZE);
     }
+
+    public IntegerPrimitiveDescription(int histogramMaxDistinctValues) {
+        histogram = new IntegerHistogram(histogramMaxDistinctValues);
+    }
+
 
     public void visit(int x) {
-        countObserved++;
-        if (x == 0) {
-            countZero++;
-        } else if (x == 1) {
-            countOne++;
-        }
         minMax.visit(x);
         meanStddev.visit(x);
+        histogram.visit(x);
     }
 
-    public int getCountObserved() {
-        return countObserved;
+    public int getTotalCount() {
+        return histogram.getTotalCount();
     }
 
     public int getCountZero() {
-        return countZero;
+        return histogram.countOf(0);
     }
 
     public int getCountOne() {
-        return countOne;
+        return histogram.countOf(1);
     }
 
     public Integer getMin() {
@@ -65,19 +66,22 @@ public class IntegerPrimitiveDescription implements PrintableDescription{
         return meanStddev;
     }
 
+    public IntegerHistogram getHistogram() {
+        return histogram;
+    }
 
     @Override
     public String header() {
-        return "countTotal\tcountZero\tcountOne\tmin\tmax\t" +
+        return "totalCount\tcountZero\tcountOne\tmin\tmax\t" +
                 "mean\tvariance\tstddev";
     }
 
     @Override
     public void toString(StringBuilder stringBuilder) {
         stringBuilder
-                .append(countObserved).append("\t")
-                .append(countZero).append("\t")
-                .append(countOne).append("\t")
+                .append(getTotalCount()).append("\t")
+                .append(getCountZero()).append("\t")
+                .append(getCountOne()).append("\t")
                 .append(getMin()).append("\t")
                 .append(getMax()).append("\t")
 

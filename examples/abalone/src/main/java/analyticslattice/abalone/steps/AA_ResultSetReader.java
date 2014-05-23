@@ -17,16 +17,16 @@ public class AA_ResultSetReader {
              PreparedStatement ps = connection.prepareStatement("SELECT * from abalone");
              ResultSetRecordReader reader = new ResultSetRecordReader(ps.executeQuery())) {
 
-            printSome(reader);
+            printSome(reader, 10);
         }
     }
 
-    private static void printSome(ResultSetRecordReader reader) throws SQLException {
+    private static void printSome(ResultSetRecordReader reader, int numRecordsToPrint) throws SQLException {
         ColumnSet<String> columnSet = reader.getColumnSet();
         System.out.println("Column Set Inferred From Result Meta Data: " + columnSet);
         System.out.println();
         System.out.println("The first ten records, converting all values to strings");
-        for(int i = 0; reader.next() && i < 10; i++){
+        for (int i = 0; reader.next() && i < numRecordsToPrint; i++) {
             ImmutableMap.Builder<String, String> printableMapBuilder = ImmutableMap.builder();
             for (String column : columnSet) {
                 printableMapBuilder.put(column, reader.getString(column));

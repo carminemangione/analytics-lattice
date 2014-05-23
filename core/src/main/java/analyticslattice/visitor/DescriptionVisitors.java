@@ -17,6 +17,7 @@ public class DescriptionVisitors implements RecordVisitor {
     private final ImmutableMap<String, IntegerPrimitive> integerPrimitives;
     private final ImmutableMap<String, Boolean> booleans;
     private final ImmutableMap<String, BooleanPrimitive> booleanPrimitives;
+    private final ImmutableMap<String, StringColumnVisitor> strings;
     private final ImmutableList<RecordVisitor> allVisitors;
 
 
@@ -25,13 +26,15 @@ public class DescriptionVisitors implements RecordVisitor {
                                ImmutableMap<String, Integer> integers,
                                ImmutableMap<String, IntegerPrimitive> integerPrimitives,
                                ImmutableMap<String, Boolean> booleans,
-                               ImmutableMap<String, BooleanPrimitive> booleanPrimitives) {
+                               ImmutableMap<String, BooleanPrimitive> booleanPrimitives,
+                               ImmutableMap<String, StringColumnVisitor> strings) {
         this.doubles = doubles;
         this.doublePrimitives = doublePrimitives;
         this.integers = integers;
         this.integerPrimitives = integerPrimitives;
         this.booleans = booleans;
         this.booleanPrimitives = booleanPrimitives;
+        this.strings = strings;
         this.allVisitors = ImmutableList.<RecordVisitor>builder()
                 .addAll(ImmutableList.copyOf(doubles.values()))
                 .addAll(doublePrimitives.values())
@@ -39,6 +42,7 @@ public class DescriptionVisitors implements RecordVisitor {
                 .addAll(integerPrimitives.values())
                 .addAll(booleans.values())
                 .addAll(booleanPrimitives.values())
+                .addAll(strings.values())
                 .build();
     }
 
@@ -90,6 +94,14 @@ public class DescriptionVisitors implements RecordVisitor {
         return x.getDescription();
     }
 
+    public StringDescription getString(String column){
+        StringColumnVisitor x = strings.get(column);
+        if(x == null){
+            throw new IllegalArgumentException(String.format("not StringDescription found for column \"%s\"", column));
+        }
+        return x.getDescription();
+    }
+
     @Override
     public void visit(GetColumnValue record) throws Exception {
         for (RecordVisitor visitor : allVisitors) {
@@ -106,6 +118,7 @@ public class DescriptionVisitors implements RecordVisitor {
         printOutTypeVisitors(stringBuilder, integerPrimitives.values(), "primitive integer column\t");
         printOutTypeVisitors(stringBuilder, booleans.values(), "boolean column\t");
         printOutTypeVisitors(stringBuilder, booleanPrimitives.values(), "primitive boolean column\t");
+        printOutTypeVisitors(stringBuilder, strings.values(), "string column\t");
         return stringBuilder.toString();
     }
 
@@ -198,6 +211,18 @@ public class DescriptionVisitors implements RecordVisitor {
         }
     }
 
+    public static class StringColumnVisitor extends ColumnVisitor<StringDescription> {
+
+        public StringColumnVisitor(String column) {
+            super(column, new StringDescription());
+        }
+
+        @Override
+        public void visit(GetColumnValue record) throws Exception {
+            description.visit(record.getString(column));
+        }
+    }
+
     public abstract static class ColumnVisitor<D extends PrintableDescription>
             implements RecordVisitor, Comparable<ColumnVisitor> {
 
@@ -231,6 +256,7 @@ public class DescriptionVisitors implements RecordVisitor {
         private final ImmutableMap.Builder<String, IntegerPrimitive> integerPrimitives = ImmutableMap.builder();
         private final ImmutableMap.Builder<String, Boolean> booleans = ImmutableMap.builder();
         private final ImmutableMap.Builder<String, BooleanPrimitive> booleanPrimitives = ImmutableMap.builder();
+        private final ImmutableMap.Builder<String, StringColumnVisitor> strings = ImmutableMap.builder();
 
         private Builder() {
         }
@@ -331,6 +357,23 @@ public class DescriptionVisitors implements RecordVisitor {
             return addDoublePrimitives(Arrays.asList(columns));
         }
 
+
+        public Builder addString(String column) {
+            strings.put(column, new StringColumnVisitor(column));
+            return this;
+        }
+
+        public Builder addStrings(Iterable<String> columns) {
+            for (String column : columns) {
+                addString(column);
+            }
+            return this;
+        }
+
+        public Builder addStrings(String columns) {
+            return addStrings(Arrays.asList(columns));
+        }
+
         public DescriptionVisitors build() {
             return new DescriptionVisitors(
                     doubles.build(),
@@ -338,7 +381,8 @@ public class DescriptionVisitors implements RecordVisitor {
                     integers.build(),
                     integerPrimitives.build(),
                     booleans.build(),
-                    booleanPrimitives.build());
+                    booleanPrimitives.build(),
+                    strings.build());
         }
     }
 }

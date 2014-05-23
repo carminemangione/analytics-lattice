@@ -1,49 +1,44 @@
 package analyticslattice.stats.description;
 
 import analyticslattice.stats.MeanStddev;
+import analyticslattice.stats.histogram.DoubleHistogram;
+import analyticslattice.stats.histogram.Histogram;
 import analyticslattice.stats.minmax.DoubleMinMax;
 
 public class DoublePrimitiveDescription implements PrintableDescription {
 
     private final DoubleMinMax minMax = new DoubleMinMax();
     private final MeanStddev meanStddev = new MeanStddev();
-    private int countObserved = 0;
-    private int countZero = 0;
-    private int countOne = 0;
-    private int countNan = 0;
+    private final DoubleHistogram histogram;
 
     public DoublePrimitiveDescription() {
+        this(Histogram.DEFAULT_SIZE);
+    }
+
+    public DoublePrimitiveDescription(int histogramMaxDistinctValues) {
+        this.histogram = new DoubleHistogram(histogramMaxDistinctValues);
     }
 
     public void visit(double x) {
-        countObserved++;
-        if (Double.isNaN(x)) {
-            countNan++;
-        } else {
-            if (x == 0.0) {
-                countZero++;
-            } else if (x == 1.0) {
-                countOne++;
-            }
-            minMax.visit(x);
-            meanStddev.visit(x);
-        }
+        histogram.visit(x);
+        minMax.visit(x);
+        meanStddev.visit(x);
     }
 
-    public int getCountObserved() {
-        return countObserved;
+    public int getTotalCount() {
+        return histogram.getTotalCount();
     }
 
     public int getCountZero() {
-        return countZero;
+        return histogram.countOf(0.0);
     }
 
     public int getCountOne() {
-        return countOne;
+        return histogram.countOf(1.0);
     }
 
     public int getCountNan() {
-        return countNan;
+        return histogram.countOf(Double.NaN);
     }
 
     public Double getMin() {
@@ -74,9 +69,13 @@ public class DoublePrimitiveDescription implements PrintableDescription {
         return meanStddev;
     }
 
+    public DoubleHistogram getHistogram() {
+        return histogram;
+    }
+
     @Override
     public String header() {
-        return "countTotal\tcountZero\tcountOne\tcountNan\tmin\t" +
+        return "totalCount\tcountZero\tcountOne\tcountNan\tmin\t" +
                 "max\tmean\tvariance\tstddev";
     }
 
@@ -84,10 +83,10 @@ public class DoublePrimitiveDescription implements PrintableDescription {
     @Override
     public void toString(StringBuilder stringBuilder) {
         stringBuilder
-                .append(countObserved).append("\t")
-                .append(countZero).append("\t")
-                .append(countOne).append("\t")
-                .append(countNan).append("\t")
+                .append(getTotalCount()).append("\t")
+                .append(getCountZero()).append("\t")
+                .append(getCountOne()).append("\t")
+                .append(getCountNan()).append("\t")
                 .append(getMin()).append("\t")
 
                 .append(getMax()).append("\t")

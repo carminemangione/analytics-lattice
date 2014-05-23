@@ -11,7 +11,7 @@ public class DoubleDescriptionTest {
     @Test
     public void noValues() throws Exception {
         DoubleDescription description = new DoubleDescription();
-        assertEquals(0, description.getCountObserved());
+        assertEquals(0, description.getTotalCount());
         assertEquals(0, description.getCountNan());
         assertEquals(0, description.getCountNull());
         assertEquals(0, description.getCountZero());
@@ -35,7 +35,7 @@ public class DoubleDescriptionTest {
         description.visit(null);
         description.visit(Double.NaN);
 
-        assertEquals(8, description.getCountObserved());
+        assertEquals(8, description.getTotalCount());
         assertEquals(1, description.getCountNan());
         assertEquals(2, description.getCountNull());
         assertEquals(2, description.getCountZero());

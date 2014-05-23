@@ -1,49 +1,46 @@
 package analyticslattice.stats.description;
 
 import analyticslattice.stats.MeanStddev;
+import analyticslattice.stats.histogram.Histogram;
+import analyticslattice.stats.histogram.IntegerHistogram;
 import analyticslattice.stats.minmax.IntegerMinMax;
 
 public class IntegerDescription implements PrintableDescription {
 
     private final IntegerMinMax minMax = new IntegerMinMax();
     private final MeanStddev meanStddev = new MeanStddev();
-    private int countObserved = 0;
-    private int countZero = 0;
-    private int countOne = 0;
-    private int countNull = 0;
+    private final IntegerHistogram histogram;
 
     public IntegerDescription() {
+        this(Histogram.DEFAULT_SIZE);
+    }
+
+    public IntegerDescription(int histogramMaxDistinctValues) {
+        this.histogram = new IntegerHistogram(histogramMaxDistinctValues);
     }
 
     public void visit(Integer x) {
-        countObserved++;
-        if (x == null) {
-            countNull++;
-        } else {
-            if (x == 0) {
-                countZero++;
-            } else if (x == 1) {
-                countOne++;
-            }
+        if (x != null) {
             minMax.visit(x);
             meanStddev.visit(x);
         }
+        histogram.visit(x);
     }
 
-    public int getCountObserved() {
-        return countObserved;
+    public int getTotalCount() {
+        return histogram.getTotalCount();
     }
 
     public int getCountZero() {
-        return countZero;
+        return histogram.countOf(0);
     }
 
     public int getCountOne() {
-        return countOne;
+        return histogram.countOf(1);
     }
 
     public int getCountNull() {
-        return countNull;
+        return histogram.countOf(null);
     }
 
 
@@ -75,19 +72,23 @@ public class IntegerDescription implements PrintableDescription {
         return meanStddev;
     }
 
+    public IntegerHistogram getHistogram() {
+        return histogram;
+    }
+
     @Override
     public String header() {
-        return "countTotal\tcountZero\tcountOne\tcountNull\tmin\t" +
+        return "totalCount\tcountZero\tcountOne\tcountNull\tmin\t" +
                 "max\tmean\tvariance\tstddev";
     }
 
     @Override
     public void toString(StringBuilder stringBuilder) {
         stringBuilder
-                .append(countObserved).append("\t")
-                .append(countZero).append("\t")
-                .append(countOne).append("\t")
-                .append(countNull).append("\t")
+                .append(getTotalCount()).append("\t")
+                .append(getCountZero()).append("\t")
+                .append(getCountOne()).append("\t")
+                .append(getCountNull()).append("\t")
                 .append(getMin()).append("\t")
 
                 .append(getMax()).append("\t")
