@@ -114,6 +114,26 @@ public class SmartResultSet implements GetColumnValue, AutoCloseable {
         return rs.getDouble(columnIndex+1);
     }
 
+    @Override
+    public <T> T getCustom(String name, Class<T> clazz) throws Exception {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
+    }
+
+    @Override
+    public <T> T getCustom(int columnIndex, Class<T> clazz) throws Exception {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
+    }
+
+    @Override
+    public <T> T getCustom(String name) throws Exception {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
+    }
+
+    @Override
+    public <T> T getCustom(int columnIndex) throws Exception {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
+    }
+
     public boolean next() throws SQLException {
         return rs.next();
     }

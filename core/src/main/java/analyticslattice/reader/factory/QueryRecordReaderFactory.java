@@ -1,7 +1,6 @@
 package analyticslattice.reader.factory;
 
 import analyticslattice.reader.DelegatingRecordReader;
-import analyticslattice.reader.RecordReader;
 import analyticslattice.reader.ResultSetRecordReader;
 import com.google.common.collect.ImmutableList;
 
@@ -28,21 +27,21 @@ public class QueryRecordReaderFactory implements RecordReaderFactory {
     }
 
     @Override
-    public RecordReader openReader() throws SQLException {
+    public QueryRecordReader openReader() throws SQLException {
         Connection connection = null;
         PreparedStatement ps = null;
         try {
             connection = dataSource.getConnection();
             ps = connection.prepareStatement(query);
-            if(sqlParameters != null){
-                for(int i = 0; i < sqlParameters.size(); i++){
-                    ps.setObject(i+1, sqlParameters.get(i));
+            if (sqlParameters != null) {
+                for (int i = 0; i < sqlParameters.size(); i++) {
+                    ps.setObject(i + 1, sqlParameters.get(i));
                 }
             }
 
             ResultSet rs = ps.executeQuery();
             ResultSetRecordReader delegate = new ResultSetRecordReader(rs);
-            return new QueryRecordReader(connection,ps, delegate);
+            return new QueryRecordReader(connection, ps, delegate);
         } catch (SQLException e) {
             try {
                 closeAllSQL(ps, connection);
@@ -72,19 +71,19 @@ public class QueryRecordReaderFactory implements RecordReaderFactory {
     public static void closeAllSQL(AutoCloseable... closeables) throws SQLException {
         ImmutableList.Builder<SQLException> exceptionsBuilder = ImmutableList.builder();
         for (AutoCloseable closeable : closeables) {
-            try{
-                if(closeable != null){
+            try {
+                if (closeable != null) {
                     closeable.close();
                 }
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 exceptionsBuilder.add(e);
-            }catch (Exception e){
+            } catch (Exception e) {
                 exceptionsBuilder.add(new SQLException(e));
             }
         }
         ImmutableList<SQLException> sqlExceptions = exceptionsBuilder.build();
-        if(sqlExceptions.size() >= 1){
-            throw  sqlExceptions.get(0);
+        if (sqlExceptions.size() >= 1) {
+            throw sqlExceptions.get(0);
         }
     }
 }

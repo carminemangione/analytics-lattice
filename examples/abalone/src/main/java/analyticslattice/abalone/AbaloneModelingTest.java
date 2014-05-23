@@ -38,7 +38,7 @@ public class AbaloneModelingTest {
 //        try(Connection connection = derbyRule.openConnection();
 //            PreparedStatement ps = connection.prepareStatement("SELECT * from abalone");
 //            ResultSetRecordReader reader = new ResultSetRecordReader(ps.executeQuery())){
-//            ColumnSet<String> expectedColumnSet = ColumnSet.from(Arrays.asList("sex", "length", "diameter", "height", "whole_weight",
+//            ColumnSet expectedColumnSet = ColumnSet.from(Arrays.asList("sex", "length", "diameter", "height", "whole_weight",
 //                    "shucked_weight", "viscera_weight", "shell_weight", "rings"));
 //            assertEquals(expectedColumnSet, reader.getColumnSet());
 //        }

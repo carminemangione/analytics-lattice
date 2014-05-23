@@ -1,5 +1,6 @@
 package analyticslattice.abalone;
 
+import analyticslattice.abalone.variables.Sex;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.ImmutableList;
 
@@ -87,12 +88,6 @@ public class Abalone {
         ps.setDouble(++i, visceraWeight);
         ps.setDouble(++i, shellWeight);
         ps.setInt(++i, rings);
-    }
-
-    public static enum Sex {
-        M,
-        F,
-        I
     }
 
 }

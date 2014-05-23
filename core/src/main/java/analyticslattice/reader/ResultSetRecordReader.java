@@ -10,21 +10,21 @@ import java.sql.SQLException;
 
 public class ResultSetRecordReader implements RecordReader {
 
-    private final ColumnSet<String> columnSet;
+    private final ColumnSet columnSet;
     private final SmartResultSet rs;
 
     public ResultSetRecordReader(ResultSet rs) throws SQLException {
         this.rs = new SmartResultSet(rs);
         ImmutableList.Builder<String> builder = ImmutableList.builder();
         ResultSetMetaData metaData = rs.getMetaData();
-        for(int i = 1; i <= metaData.getColumnCount(); i++){
+        for (int i = 1; i <= metaData.getColumnCount(); i++) {
             builder.add(metaData.getColumnName(i).toLowerCase());
         }
         this.columnSet = ColumnSet.from(builder.build());
     }
 
     @Override
-    public ColumnSet<String> getColumnSet() {
+    public ColumnSet getColumnSet() {
         return columnSet;
     }
 
@@ -126,5 +126,25 @@ public class ResultSetRecordReader implements RecordReader {
     @Override
     public double getDoublePrimitive(int columnIndex) throws SQLException {
         return rs.getDoublePrimitive(columnIndex);
+    }
+
+    @Override
+    public <T> T getCustom(String name, Class<T> clazz) {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
+    }
+
+    @Override
+    public <T> T getCustom(int columnIndex, Class<T> clazz) {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
+    }
+
+    @Override
+    public <T> T getCustom(String name) throws Exception {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
+    }
+
+    @Override
+    public <T> T getCustom(int columnIndex) throws Exception {
+        throw new UnsupportedOperationException("cannot get custom objects from result sets");
     }
 }

@@ -5,7 +5,7 @@ import analyticslattice.GetColumnValue;
 
 public interface RecordReader extends GetColumnValue, AutoCloseable {
 
-    ColumnSet<String> getColumnSet();
+    ColumnSet getColumnSet();
 
     boolean next() throws Exception;
 }

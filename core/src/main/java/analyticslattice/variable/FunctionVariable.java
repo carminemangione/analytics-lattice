@@ -3,16 +3,16 @@ package analyticslattice.variable;
 import analyticslattice.GetColumnValue;
 import analyticslattice.GetRecordValue;
 
-public abstract class FunctionVariable implements GetRecordValue, Variable {
+public abstract class FunctionVariable<R> implements GetRecordValue<R>, Variable {
 
     private final String name;
 
-    protected FunctionVariable(String name) {
+    public FunctionVariable(String name) {
         this.name = name;
     }
 
     @Override
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
@@ -59,6 +59,16 @@ public abstract class FunctionVariable implements GetRecordValue, Variable {
     @Override
     public double getDoublePrimitive(GetColumnValue record) throws Exception {
         throw notImplementedException("getDoublePrimitive");
+    }
+
+    @Override
+    public Object getObject(GetColumnValue record) throws Exception {
+        throw notImplementedException("getObject");
+    }
+
+    @Override
+    public R getCustom(GetColumnValue record) throws Exception {
+        throw notImplementedException("getCustom");
     }
 
     private UnsupportedOperationException notImplementedException(String methodName) {

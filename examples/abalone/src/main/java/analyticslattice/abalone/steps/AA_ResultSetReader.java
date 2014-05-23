@@ -22,7 +22,7 @@ public class AA_ResultSetReader {
     }
 
     private static void printSome(ResultSetRecordReader reader, int numRecordsToPrint) throws SQLException {
-        ColumnSet<String> columnSet = reader.getColumnSet();
+        ColumnSet columnSet = reader.getColumnSet();
         System.out.println("Column Set Inferred From Result Meta Data: " + columnSet);
         System.out.println();
         System.out.println("The first ten records, converting all values to strings");

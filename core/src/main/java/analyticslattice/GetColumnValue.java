@@ -38,4 +38,11 @@ public interface GetColumnValue {
 
     double getDoublePrimitive(int columnIndex) throws Exception;
 
+    <T> T getCustom(String name, Class<T> clazz) throws Exception;
+
+    <T> T getCustom(int columnIndex, Class<T> clazz) throws Exception;
+
+    <T> T getCustom(String name) throws Exception;
+
+    <T> T getCustom(int columnIndex) throws Exception;
 }

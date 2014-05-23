@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
+import sun.font.LayoutPathImpl;
 
 import java.util.Arrays;
 
@@ -383,6 +384,10 @@ public class DescriptionVisitors implements RecordVisitor {
                     booleans.build(),
                     booleanPrimitives.build(),
                     strings.build());
+        }
+
+        public LayoutPathImpl.SegmentPathBuilder addCustom(String name, HistogramDescription description) {
+            return null;
         }
     }
 }

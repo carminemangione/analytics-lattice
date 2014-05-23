@@ -1,6 +1,6 @@
 package analyticslattice;
 
-public interface GetRecordValue {
+public interface GetRecordValue<R> {
 
     String getString(GetColumnValue record) throws Exception;
 
@@ -19,5 +19,9 @@ public interface GetRecordValue {
     Double getDouble(GetColumnValue record) throws Exception;
 
     double getDoublePrimitive(GetColumnValue record) throws Exception;
+
+    Object getObject(GetColumnValue record) throws Exception;
+
+    R getCustom(GetColumnValue record) throws Exception;
 
 }

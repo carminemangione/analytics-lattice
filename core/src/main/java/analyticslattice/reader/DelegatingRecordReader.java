@@ -11,7 +11,7 @@ public class DelegatingRecordReader implements RecordReader {
     }
 
     @Override
-    public ColumnSet<String> getColumnSet() {
+    public ColumnSet getColumnSet() {
         return delegate.getColumnSet();
     }
 
@@ -108,6 +108,26 @@ public class DelegatingRecordReader implements RecordReader {
     @Override
     public double getDoublePrimitive(int columnIndex) throws Exception {
         return delegate.getDoublePrimitive(columnIndex);
+    }
+
+    @Override
+    public <T> T getCustom(String name, Class<T> clazz) throws Exception {
+        return delegate.getCustom(name, clazz);
+    }
+
+    @Override
+    public <T> T getCustom(int columnIndex, Class<T> clazz) throws Exception {
+        return delegate.getCustom(columnIndex, clazz);
+    }
+
+    @Override
+    public <T> T getCustom(String name) throws Exception {
+        return delegate.getCustom(name);
+    }
+
+    @Override
+    public <T> T getCustom(int columnIndex) throws Exception {
+        return delegate.getCustom(columnIndex);
     }
 
     @Override

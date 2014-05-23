@@ -56,7 +56,7 @@ public class ResultSetRecordReaderTest {
         try(Connection connection = derbyRule.openConnection();
             PreparedStatement ps = connection.prepareStatement("SELECT bar from foo");
             ResultSetRecordReader reader = new ResultSetRecordReader(ps.executeQuery())){
-            ColumnSet<String> expectedColumnSet = ColumnSet.from(Arrays.asList("bar"));
+            ColumnSet expectedColumnSet = ColumnSet.from(Arrays.asList("bar"));
             assertEquals(expectedColumnSet, reader.getColumnSet());
         }
     }
@@ -66,7 +66,7 @@ public class ResultSetRecordReaderTest {
         try(Connection connection = derbyRule.openConnection();
             PreparedStatement ps = connection.prepareStatement("SELECT bar as barz from foo");
             ResultSetRecordReader reader = new ResultSetRecordReader(ps.executeQuery())){
-            ColumnSet<String> expectedColumnSet = ColumnSet.from(Arrays.asList("barz"));
+            ColumnSet expectedColumnSet = ColumnSet.from(Arrays.asList("barz"));
             assertEquals(expectedColumnSet, reader.getColumnSet());
         }
     }
@@ -76,7 +76,7 @@ public class ResultSetRecordReaderTest {
         try(Connection connection = derbyRule.openConnection();
             PreparedStatement ps = connection.prepareStatement("SELECT count(0) from foo");
             ResultSetRecordReader reader = new ResultSetRecordReader(ps.executeQuery())){
-            ColumnSet<String> expectedColumnSet = ColumnSet.from(Arrays.asList("1"));
+            ColumnSet expectedColumnSet = ColumnSet.from(Arrays.asList("1"));
             assertEquals(expectedColumnSet, reader.getColumnSet());
         }
     }
